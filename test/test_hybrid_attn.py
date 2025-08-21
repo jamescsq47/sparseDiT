@@ -14,6 +14,46 @@ import argparse
 from flash_attn.utils.benchmark import benchmark_forward
 import time
 
+def greedy_partition_and_rearrange(sparse: torch.Tensor, num_groups: int = 8, group_size: int = 5):
+    """
+    将 [B, H, W] 的 sparse（B=40）按贪心法分到 num_groups 组，并重排为
+    [B, H, W]，使得前 group_size 个属于组0，接着 group_size 个属于组1，依此类推。
+    每组强制恰好 group_size 个元素。
+    """
+    B = sparse.shape[0]
+    assert num_groups * group_size == B, "总数必须能被 num_groups * group_size 整除"
+
+    # 权重：对后两个维度求和 -> [B]
+    weights = sparse.sum(dim=(1, 2))
+
+    # 按权重降序遍历
+    order = torch.argsort(weights, descending=True)
+    w_list = weights[order].detach().cpu().tolist()
+    idx_list = order.detach().cpu().tolist()
+
+    groups = [[] for _ in range(num_groups)]
+    group_sums = [0.0] * num_groups
+    group_counts = [0] * num_groups
+
+    for idx, w in zip(idx_list, w_list):
+        # 只在还有容量的组里选当前 sum 最小的
+        gid = min(
+            (g for g in range(num_groups) if group_counts[g] < group_size),
+            key=lambda g: group_sums[g]
+        )
+        groups[gid].append(idx)
+        group_sums[gid] += float(w)
+        group_counts[gid] += 1
+
+    # 拉平成新的排列顺序：组0的5个，组1的5个，...
+    new_order = [i for g in groups for i in g]
+    perm_idx = torch.tensor(new_order, device=sparse.device, dtype=torch.long)
+
+    # 重排（index_select 避免 Python 列表高级索引的额外开销）
+    sparse_reordered = sparse.index_select(0, perm_idx)
+
+    return sparse_reordered, groups, group_sums, perm_idx
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Test hybrid attention with configurable sequence length"
@@ -176,21 +216,30 @@ if __name__ == "__main__":
         requires_grad=True if use_bwd else False,
     )
 
+    # random sparse mask with given sparse ratio
     sparse_ratio = 1
     shape = (batch_size, seqlen // 64, nheads, seqlen // 64)
     sparse = (torch.rand(shape, device=device) < sparse_ratio)
     # half = shape[1] // 2
     # sparse[:,:half,:,:] = True
     # sparse[:,half:,:,:] = False
-    # ulysses 8/4/2 cut the third dimension
-    # ring 8 cut the second dimension
+    # # ulysses 8/4/2 cut the third dimension
+    # # ring 8 cut the second dimension
+
+    sparse_data = torch.load("/mnt/public/ns-t-te-b905754427352261-427-bk/fs/home/xieruiqi/diffuser-dev520/examples/wan/logs/calib_data/720p/sparse_plan_expanded.pth", map_location='cpu', weights_only=True)
+    sparse = sparse_data['sparse'][0, 2, :, :, :]
+    sparse_reordered, groups, group_sums, perm_idx = greedy_partition_and_rearrange(sparse)
+    sparse_reordered = sparse_reordered.unsqueeze(0)  
+    sparse_reordered = sparse_reordered.transpose(1, 2) 
+    sparse_reordered = sparse_reordered.to(device) 
+    sparse_reordered = sparse_reordered.contiguous()
 
     dout = torch.randn(batch_size, seqlen, nheads, d, device=device, dtype=dtype)
 
     dist.broadcast(q, src=0)
     dist.broadcast(k, src=0)
     dist.broadcast(v, src=0)
-    dist.broadcast(sparse, src=0)
+    dist.broadcast(sparse_reordered, src=0)
     dist.broadcast(dout, src=0)
 
     # prepare process group for hybrid sequence parallelism
@@ -234,7 +283,7 @@ if __name__ == "__main__":
 
     local_sparse = (
         EXTRACT_FUNC_DICT[ring_impl_type](
-            sparse, rank, world_size=world_size, rd=sp_ring_degree, ud=sp_ulysses_degree
+            sparse_reordered, rank, world_size=world_size, rd=sp_ring_degree, ud=sp_ulysses_degree
         )
         .detach()
         .clone()
@@ -516,4 +565,4 @@ if __name__ == "__main__":
     
     if rank == 0 or rank == 7:
         print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=20))
-        prof.export_chrome_trace(f"profile/profile_rank{rank}_ulysses{sp_ulysses_degree}ring{sp_ring_degree}_dense.json")  # 可选：导出火焰图
+        prof.export_chrome_trace(f"profile/profile_rank{rank}_ulysses{sp_ulysses_degree}ring{sp_ring_degree}_real.json")  # 可选：导出火焰图
