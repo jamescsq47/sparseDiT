@@ -14,45 +14,47 @@ import argparse
 from flash_attn.utils.benchmark import benchmark_forward
 import time
 
-def greedy_partition_and_rearrange(sparse: torch.Tensor, num_groups: int = 8, group_size: int = 5):
+def rearrange_tensor_optimized(q):
     """
-    将 [B, H, W] 的 sparse（B=40）按贪心法分到 num_groups 组，并重排为
-    [B, H, W]，使得前 group_size 个属于组0，接着 group_size 个属于组1，依此类推。
-    每组强制恰好 group_size 个元素。
+    高效重排张量，第[:,:,0:5,:]保持不变，其他分组在第一个维度上进行循环移位
+    
+    参数:
+        q: 形状为 [1, 75648, 40, 128] 的张量
+        
+    返回:
+        重排后的张量
     """
-    B = sparse.shape[0]
-    assert num_groups * group_size == B, "总数必须能被 num_groups * group_size 整除"
-
-    # 权重：对后两个维度求和 -> [B]
-    weights = sparse.sum(dim=(1, 2))
-
-    # 按权重降序遍历
-    order = torch.argsort(weights, descending=True)
-    w_list = weights[order].detach().cpu().tolist()
-    idx_list = order.detach().cpu().tolist()
-
-    groups = [[] for _ in range(num_groups)]
-    group_sums = [0.0] * num_groups
-    group_counts = [0] * num_groups
-
-    for idx, w in zip(idx_list, w_list):
-        # 只在还有容量的组里选当前 sum 最小的
-        gid = min(
-            (g for g in range(num_groups) if group_counts[g] < group_size),
-            key=lambda g: group_sums[g]
-        )
-        groups[gid].append(idx)
-        group_sums[gid] += float(w)
-        group_counts[gid] += 1
-
-    # 拉平成新的排列顺序：组0的5个，组1的5个，...
-    new_order = [i for g in groups for i in g]
-    perm_idx = torch.tensor(new_order, device=sparse.device, dtype=torch.long)
-
-    # 重排（index_select 避免 Python 列表高级索引的额外开销）
-    sparse_reordered = sparse.index_select(0, perm_idx)
-
-    return sparse_reordered, groups, group_sums, perm_idx
+    # 获取张量形状信息
+    batch_size, seq_len, channels, feature_dim = q.shape
+    
+    # 每5个通道为一组，共8组
+    channels_per_group = 5
+    num_groups = channels // channels_per_group
+    
+    # 每组需要移动的位置数
+    shift_amounts = [0] + [9456 * i for i in range(1, num_groups)]
+    
+    # 预分配结果张量
+    result = torch.empty_like(q)
+    
+    # 处理每个分组
+    for group_idx in range(num_groups):
+        start_channel = group_idx * channels_per_group
+        end_channel = (group_idx + 1) * channels_per_group
+        
+        if group_idx == 0:
+            # 第0组保持不变
+            result[:, :, start_channel:end_channel, :] = q[:, :, start_channel:end_channel, :]
+        else:
+            # 使用roll操作实现高效的循环移位
+            shift = shift_amounts[group_idx]
+            result[:, :, start_channel:end_channel, :] = torch.roll(
+                q[:, :, start_channel:end_channel, :], 
+                shifts=-shift, 
+                dims=1
+            )
+    
+    return result
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -217,29 +219,34 @@ if __name__ == "__main__":
     )
 
     # random sparse mask with given sparse ratio
-    sparse_ratio = 1
-    shape = (batch_size, seqlen // 64, nheads, seqlen // 64)
-    sparse = (torch.rand(shape, device=device) < sparse_ratio)
+    # sparse_ratio = 1
+    # shape = (batch_size, seqlen // 64, nheads, seqlen // 64)
+    # sparse = (torch.rand(shape, device=device) < sparse_ratio)
     # half = shape[1] // 2
     # sparse[:,:half,:,:] = True
     # sparse[:,half:,:,:] = False
     # # ulysses 8/4/2 cut the third dimension
     # # ring 8 cut the second dimension
 
-    sparse_data = torch.load("/mnt/public/ns-t-te-b905754427352261-427-bk/fs/home/xieruiqi/diffuser-dev520/examples/wan/logs/calib_data/720p/sparse_plan_expanded.pth", map_location='cpu', weights_only=True)
-    sparse = sparse_data['sparse'][0, 2, :, :, :]
-    sparse_reordered, groups, group_sums, perm_idx = greedy_partition_and_rearrange(sparse)
-    sparse_reordered = sparse_reordered.unsqueeze(0)  
-    sparse_reordered = sparse_reordered.transpose(1, 2) 
-    sparse_reordered = sparse_reordered.to(device) 
-    sparse_reordered = sparse_reordered.contiguous()
+    block = 2
+    # sparse_data = torch.load("/mnt/public/ns-t-te-b905754427352261-427-bk/fs/home/xieruiqi/diffuser-dev520/examples/wan/logs/calib_data/720p/sparse_plan_expanded.pth", map_location='cpu', weights_only=True)
+    # sparse = sparse_data['sparse'][0, block, :, :, :].to("cuda")
+
+    sparse = torch.load("/mnt/public/chensiqi/sparse_reordered_all.pt")[block, :, :, :].to(device) 
+    sparse = sparse.unsqueeze(0).transpose(1, 2).to(device).contiguous() #[1, 1182, 40, 1182]
+    # sparse = rearrange_tensor_optimized(sparse)
+    perm_idx_all = torch.load("/mnt/public/chensiqi/perm_idx_all.pt")
+    deperm_idx_all = torch.load("/mnt/public/chensiqi/deperm_idx_all.pt")
+    perm_idx = perm_idx_all[block].to(device)
+    deperm_idx = deperm_idx_all[block].to(device)
+    
 
     dout = torch.randn(batch_size, seqlen, nheads, d, device=device, dtype=dtype)
 
     dist.broadcast(q, src=0)
     dist.broadcast(k, src=0)
     dist.broadcast(v, src=0)
-    dist.broadcast(sparse_reordered, src=0)
+    dist.broadcast(sparse, src=0)
     dist.broadcast(dout, src=0)
 
     # prepare process group for hybrid sequence parallelism
@@ -281,14 +288,18 @@ if __name__ == "__main__":
         .clone()
     )
 
+    local_q=local_q.index_select(2, perm_idx)
+    local_k=local_k.index_select(2, perm_idx)
+    local_v=local_v.index_select(2, perm_idx)
+
     local_sparse = (
         EXTRACT_FUNC_DICT[ring_impl_type](
-            sparse_reordered, rank, world_size=world_size, rd=sp_ring_degree, ud=sp_ulysses_degree
+            sparse, rank, world_size=world_size, rd=sp_ring_degree, ud=sp_ulysses_degree
         )
         .detach()
         .clone()
     )
-    # print(f"rank:{rank},sum of local sparse: {local_sparse.sum()}")
+    # print(f"rank:{rank}, local sparse: {local_sparse.shape}, local q: {local_q.shape}")
 
 
     if use_bwd:
@@ -432,6 +443,8 @@ if __name__ == "__main__":
                 
 
     torch.cuda.synchronize()
+    local_out = local_out.index_select(2, deperm_idx)
+
     torch.distributed.barrier()  # 同步所有卡
     start = time.perf_counter()
 
@@ -565,4 +578,6 @@ if __name__ == "__main__":
     
     if rank == 0 or rank == 7:
         print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=20))
-        prof.export_chrome_trace(f"profile/profile_rank{rank}_ulysses{sp_ulysses_degree}ring{sp_ring_degree}_real.json")  # 可选：导出火焰图
+        prof.export_chrome_trace(f"profile/wan/profile_rank{rank}_ulysses{sp_ulysses_degree}ring{sp_ring_degree}_block{block}_real.json")  # 可选：导出火焰图
+
+
