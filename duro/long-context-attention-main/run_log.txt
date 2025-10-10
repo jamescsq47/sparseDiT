@@ -1,0 +1,89 @@
+W1003 15:39:17.682000 140683839960896 torch/distributed/run.py:779] 
+W1003 15:39:17.682000 140683839960896 torch/distributed/run.py:779] *****************************************
+W1003 15:39:17.682000 140683839960896 torch/distributed/run.py:779] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1003 15:39:17.682000 140683839960896 torch/distributed/run.py:779] *****************************************
+rank 6, sp_ulysses_degree: 4, sp_ring_degree: 2
+rank 2, sp_ulysses_degree: 4, sp_ring_degree: 2
+rank 0, sp_ulysses_degree: 4, sp_ring_degree: 2
+rank 3, sp_ulysses_degree: 4, sp_ring_degree: 2
+rank 7, sp_ulysses_degree: 4, sp_ring_degree: 2
+rank 1, sp_ulysses_degree: 4, sp_ring_degree: 2
+rank 4, sp_ulysses_degree: 4, sp_ring_degree: 2
+rank 5, sp_ulysses_degree: 4, sp_ring_degree: 2
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/mnt/public/chensiqi/long-context-attention-main/./test/test_hybrid_attn.py", line 660, in <module>
+[rank3]:     EXTRACT_FUNC_DICT["basic_0"](
+[rank3]:   File "/mnt/public/chensiqi/long-context-attention-main/yunchang/comm/extract_local.py", line 30, in basic_extract_local_0
+[rank3]:     return value.chunk(world_size, dim=0)[rank].detach().clone()
+[rank3]: IndexError: tuple index out of range
+[rank7]: Traceback (most recent call last):
+[rank7]:   File "/mnt/public/chensiqi/long-context-attention-main/./test/test_hybrid_attn.py", line 660, in <module>
+[rank7]:     EXTRACT_FUNC_DICT["basic_0"](
+[rank7]:   File "/mnt/public/chensiqi/long-context-attention-main/yunchang/comm/extract_local.py", line 30, in basic_extract_local_0
+[rank7]:     return value.chunk(world_size, dim=0)[rank].detach().clone()
+[rank7]: IndexError: tuple index out of range
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/mnt/public/chensiqi/long-context-attention-main/./test/test_hybrid_attn.py", line 660, in <module>
+[rank4]:     EXTRACT_FUNC_DICT["basic_0"](
+[rank4]:   File "/mnt/public/chensiqi/long-context-attention-main/yunchang/comm/extract_local.py", line 30, in basic_extract_local_0
+[rank4]:     return value.chunk(world_size, dim=0)[rank].detach().clone()
+[rank4]: IndexError: tuple index out of range
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/mnt/public/chensiqi/long-context-attention-main/./test/test_hybrid_attn.py", line 660, in <module>
+[rank2]:     EXTRACT_FUNC_DICT["basic_0"](
+[rank2]:   File "/mnt/public/chensiqi/long-context-attention-main/yunchang/comm/extract_local.py", line 30, in basic_extract_local_0
+[rank2]:     return value.chunk(world_size, dim=0)[rank].detach().clone()
+[rank2]: IndexError: tuple index out of range
+[rank6]: Traceback (most recent call last):
+[rank6]:   File "/mnt/public/chensiqi/long-context-attention-main/./test/test_hybrid_attn.py", line 660, in <module>
+[rank6]:     EXTRACT_FUNC_DICT["basic_0"](
+[rank6]:   File "/mnt/public/chensiqi/long-context-attention-main/yunchang/comm/extract_local.py", line 30, in basic_extract_local_0
+[rank6]:     return value.chunk(world_size, dim=0)[rank].detach().clone()
+[rank6]: IndexError: tuple index out of range
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/mnt/public/chensiqi/long-context-attention-main/./test/test_hybrid_attn.py", line 660, in <module>
+[rank5]:     EXTRACT_FUNC_DICT["basic_0"](
+[rank5]:   File "/mnt/public/chensiqi/long-context-attention-main/yunchang/comm/extract_local.py", line 30, in basic_extract_local_0
+[rank5]:     return value.chunk(world_size, dim=0)[rank].detach().clone()
+[rank5]: IndexError: tuple index out of range
+W1003 15:39:32.717000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:858] Sending process 1739609 closing signal SIGTERM
+W1003 15:39:32.717000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:858] Sending process 1739610 closing signal SIGTERM
+W1003 15:39:32.718000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:858] Sending process 1739611 closing signal SIGTERM
+W1003 15:39:32.718000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:858] Sending process 1739612 closing signal SIGTERM
+W1003 15:39:32.718000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:858] Sending process 1739613 closing signal SIGTERM
+W1003 15:39:32.718000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:858] Sending process 1739614 closing signal SIGTERM
+W1003 15:39:32.718000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:858] Sending process 1739616 closing signal SIGTERM
+/mnt/public/chensiqi/anaconda3/envs/usp/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/mnt/public/chensiqi/anaconda3/envs/usp/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+E1003 15:39:33.684000 140683839960896 torch/distributed/elastic/multiprocessing/api.py:833] failed (exitcode: 1) local_rank: 6 (pid: 1739615) of binary: /mnt/public/chensiqi/anaconda3/envs/usp/bin/python
+Traceback (most recent call last):
+  File "/mnt/public/chensiqi/anaconda3/envs/usp/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==2.4.0', 'console_scripts', 'torchrun')())
+  File "/mnt/public/chensiqi/anaconda3/envs/usp/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 348, in wrapper
+    return f(*args, **kwargs)
+  File "/mnt/public/chensiqi/anaconda3/envs/usp/lib/python3.10/site-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/mnt/public/chensiqi/anaconda3/envs/usp/lib/python3.10/site-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/mnt/public/chensiqi/anaconda3/envs/usp/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 133, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/mnt/public/chensiqi/anaconda3/envs/usp/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+./test/test_hybrid_attn.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-10-03_15:39:32
+  host      : is-dbk5hvtyuoby6of7-devmachine-0
+  rank      : 6 (local_rank: 6)
+  exitcode  : 1 (pid: 1739615)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

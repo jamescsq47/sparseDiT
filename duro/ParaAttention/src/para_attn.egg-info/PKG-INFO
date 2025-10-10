@@ -1,0 +1,27 @@
+Metadata-Version: 2.4
+Name: para_attn
+Version: 0.3.39.dev0+dirty
+Summary: Context parallel attention that works with torch.compile
+Author-email: Zeyi Cheng <ichengzeyi@gmail.com>
+Project-URL: Repository, https://github.com/chengzeyi/ParaAttention
+Requires-Python: >=3.8
+Requires-Dist: packaging
+Requires-Dist: torch
+Provides-Extra: all
+Provides-Extra: dev
+Requires-Dist: pre-commit; extra == "dev"
+Requires-Dist: pytest<8.0.0,>=7.0.0; extra == "dev"
+Requires-Dist: pytest-html; extra == "dev"
+Requires-Dist: expecttest; extra == "dev"
+Requires-Dist: hypothesis; extra == "dev"
+Requires-Dist: transformers; extra == "dev"
+Requires-Dist: diffusers@ git+https://github.com/huggingface/diffusers ; extra == "dev"
+Requires-Dist: accelerate; extra == "dev"
+Requires-Dist: peft; extra == "dev"
+Requires-Dist: protobuf; extra == "dev"
+Requires-Dist: sentencepiece; extra == "dev"
+Requires-Dist: opencv-python; extra == "dev"
+Requires-Dist: ftfy; extra == "dev"
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python

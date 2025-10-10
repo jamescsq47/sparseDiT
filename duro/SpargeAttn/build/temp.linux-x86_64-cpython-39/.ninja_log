@@ -1,0 +1,21 @@
+# ninja log v5
+0	30080	1741850158075392516	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/pybind.o	6f0a1dfc018ec3df
+1	62016	1741850190011719236	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f8_cuda.o	84a4939e25df78ea
+1	94284	1741850222280049078	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda.o	ce6f2c684316ebb7
+4	27024	1741850249912331326	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/pybind.o	73d8ec37ed2324b4
+3	42014	1741850264900484345	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/fused.o	f29991709adb4b85
+29	30758	1743426778744848489	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/pybind.o	2ec2779c47a5f0ed
+30	61918	1743426809905173450	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f8_cuda.o	31e6382da96e4729
+30	92621	1743426840605493507	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda.o	2bc07c90ec19aba8
+34	27873	1743426869061790083	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/pybind.o	c47514ae01fd2c2a
+34	41639	1743426882829933548	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/fused.o	7c34800abf210160
+18	29966	1746626675264062952	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/pybind.o	1799bebc4a01d8f0
+18	71229	1746626716520484652	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f8_cuda.o	a10b95ff4d436442
+18	103596	1746626748884815610	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda.o	395045c9dad22a99
+21	27809	1746626777309106378	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/pybind.o	8cdd9e14bbdaa0ff
+21	49095	1746626798593324165	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/fused.o	12bb34dcd1db5889
+39	29165	1746942070503981539	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/pybind.o	d91f7c24c90d4cbf
+39	70901	1746942112232395312	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f8_cuda.o	9e0b9e94f5eed98a
+39	102757	1746942144088711759	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda.o	3d5d096b6cc6a39e
+37	27500	1746942172184991234	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/pybind.o	f188df886c29ab0
+36	52189	1746942196873237087	/home/chensiqi/SpargeAttn/build/temp.linux-x86_64-cpython-39/csrc/fused/fused.o	c4e60544f449120a

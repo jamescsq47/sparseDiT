@@ -1,0 +1,8 @@
+# ninja log v5
+0	31304	1748566761045790154	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-312/csrc/qattn/pybind_sm80.o	b45b1f3d0575d1c2
+0	256671	1748566986400223766	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-312/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	c72eb07966c221f2
+0	296137	1748567001100382021	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-312/csrc/qattn/qk_int_sv_int8_cuda_sm80.o	278a00f352cf604e
+0	28983	1748567055588968187	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-312/csrc/rope/pybind.o	fda1e88451c5a96
+0	45062	1748567071665141004	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-312/csrc/rope/rope.o	5804aae1e2b0fcb6
+0	29345	1748567101621462893	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-312/csrc/fused/pybind.o	71edc270549d28da
+0	47917	1748567120189662326	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-312/csrc/fused/fused.o	f44506b7db78da82

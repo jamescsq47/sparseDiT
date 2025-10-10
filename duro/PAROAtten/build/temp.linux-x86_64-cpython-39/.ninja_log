@@ -1,0 +1,26 @@
+# ninja log v5
+36	51700	1748519131378322000	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/fused/fused.o	12f0a03c10fb2d35
+40	28465	1753427880890177712	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/pybind_sm80.o	b239e18f3dce6eae
+41	268665	1753428121077025155	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	1fb964cef3dedb2d
+37	29099	1748519108782079620	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/fused/pybind.o	e07a48df31667b26
+41	288802	1753428141209263587	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_int8_cuda_sm80.o	f09b078c7c2a1e4e
+36	27334	1748519056073513454	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/rope/pybind.o	b21dbf54431b45bf
+36	50313	1748519079049760392	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/rope/rope.o	ce9ce9badd371ddb
+37	27142	1753428169061593402	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/rope/pybind.o	11c3926894b95c5e
+37	49924	1753428191837863068	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/rope/rope.o	304c4e8ddc57ea1d
+36	28683	1753428221262211393	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/fused/pybind.o	281948baa3a9bb5d
+36	51316	1753428243890479229	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/fused/fused.o	3fbd91124fb81949
+39	269534	1753429650337304658	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	1fb964cef3dedb2d
+38	257609	1753430314523618921	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	1fb964cef3dedb2d
+38	268701	1753455002303692538	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	1fb964cef3dedb2d
+38	265874	1753455357176381107	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	1fb964cef3dedb2d
+39	375936	1753459773451043619	/home/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	1fb964cef3dedb2d
+56	29460	1753589260000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/pybind_sm80.o	5a8905d477e474d6
+56	273344	1753589504000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	9ccbcc3feddd9908
+56	291259	1753589522000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_int8_cuda_sm80.o	e1bdcb70807aee4c
+71	26423	1753589549000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/rope/pybind.o	9664df48690facd4
+71	59281	1753589582000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/rope/rope.o	7c19425c1bc81e1b
+33	26682	1753589609000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/fused/pybind.o	e60fe138016e3fb7
+32	60864	1753589643000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/fused/fused.o	6ed100f56e18dd11
+116	260158	1753592947000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	9ccbcc3feddd9908
+179	255257	1753670806000000000	/mnt/public/chensiqi/PAROAtten/build/temp.linux-x86_64-cpython-39/csrc/qattn/qk_int_sv_f16_cuda_sm80.o	9ccbcc3feddd9908

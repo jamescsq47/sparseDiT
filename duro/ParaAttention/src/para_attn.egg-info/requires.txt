@@ -1,0 +1,19 @@
+packaging
+torch
+
+[all]
+
+[dev]
+pre-commit
+pytest<8.0.0,>=7.0.0
+pytest-html
+expecttest
+hypothesis
+transformers
+diffusers@ git+https://github.com/huggingface/diffusers
+accelerate
+peft
+protobuf
+sentencepiece
+opencv-python
+ftfy
